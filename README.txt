@@ -44,6 +44,12 @@ passeses these as parameters to the multiSigWallet constructor (on deployment)
     $ git push -u origin master
 
 
+Prep Part 2:  Creating Test scripts for the MultiSig Wallet
+16: Install truffle assertions:
+    $ npm install truffle-assertions
+17: Develop a series of tests in tests/multiSigWallet_tests.js
+
+
 
     
  
