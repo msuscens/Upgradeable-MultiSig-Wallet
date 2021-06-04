@@ -1,10 +1,11 @@
 const Wallet = artifacts.require("MultiSigWallet")
 const truffleAssert = require("truffle-assertions")
 
-contract("Wallet", accounts => {
+contract("Wallet", async accounts => {
+
+    "use strict"
 
     let wallet
-
     before(async function() {
         wallet = await Wallet.deployed()
     })
@@ -183,7 +184,7 @@ contract("Wallet", accounts => {
         it("should have stored a submitted transfer request correctly", async () => {
             let transferRequest
             await truffleAssert.passes(
-                transferRequest = await wallet.getTransferRequest(0)
+                transferRequest = await wallet.getTransferRequest(0),
             )
             assert.equal(transferRequest.requestor, accounts[1])
             assert.equal(transferRequest.recipient, accounts[3])
@@ -194,7 +195,10 @@ contract("Wallet", accounts => {
         })
 
         it("should only allow a wallet owner to cancel (existing) transfer requests", async () => {
-            let numRequests = await wallet.totalTransferRequests()
+            let numRequests
+            await truffleAssert.passes(
+                numRequests = await wallet.totalTransferRequests()
+            )
             assert.equal(
                 Number(numRequests),
                 1,
@@ -227,13 +231,15 @@ contract("Wallet", accounts => {
                 "Owner unable to cancel a transfer request!"
             )
 
-            request = await wallet.getTransferRequest(requestId)
+            let request
+            await truffleAssert.passes(
+                request = await wallet.getTransferRequest(requestId)
+            )
             assert.equal(
                 Number(request.requestor), 
                 0,
-                `Able to retreive a deleted transfer request!`
+                "Able to retreive a deleted transfer request!"
             )
-
         })
     })
 
@@ -251,7 +257,10 @@ contract("Wallet", accounts => {
                 ),
                 "Failed to create valid transfer request!"
             )
-            let numRequests = await wallet.totalTransferRequests()
+            let numRequests
+            await truffleAssert.passes(
+                numRequests = await wallet.totalTransferRequests()
+            )            
             const requestId = numRequests - 1
 
             // Approver makes first transfer request approval
@@ -262,7 +271,10 @@ contract("Wallet", accounts => {
                 ),
                 "First approval failed but should have succeded!"
             )
-            let request = await wallet.getTransferRequest(requestId)
+            let request
+            await truffleAssert.passes(
+                request = await wallet.getTransferRequest(requestId)
+            )
             assert.equal(
                 Number(request.approvals), 
                 1,
@@ -278,7 +290,9 @@ contract("Wallet", accounts => {
             )
 
             // Check that only one approval has been recorded
-            request = await wallet.getTransferRequest(requestId)
+            await truffleAssert.passes(
+                request = await wallet.getTransferRequest(requestId)
+            )
             assert.equal(
                 Number(request.approvals), 
                 1,
@@ -288,7 +302,10 @@ contract("Wallet", accounts => {
 
         it("should NOT allow non-approver address to approve a transfer request", async () => {
 
-            let numRequests = await wallet.totalTransferRequests()
+            let numRequests
+            await truffleAssert.passes(
+                numRequests = await wallet.totalTransferRequests()
+            )      
             const requestId = numRequests - 1
 
             await truffleAssert.reverts(
