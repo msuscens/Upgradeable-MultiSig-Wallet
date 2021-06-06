@@ -22,16 +22,16 @@ contract("Wallet", async accounts => {
     //    accounts[0], accounts[1], accounts[2]
     // (ie. in this instance, the approvers are the owners)
 
-        it ("should have the expected creator"), async () => {
+        it ("should have the expected creator", async () => {
             let creator
             await truffleAssert.passes(
                 creator = await wallet.getWalletCreator(),
                 "Unable to get wallet's creator"
             )
             assert.equal(creator, accounts[0])
-        }
+        })
 
-        it ("should have the expected owners"), async () => {
+        it ("should have the expected owners", async () => {
             let owners
             await truffleAssert.passes(
                 owners = await wallet.getOwners(),
@@ -42,16 +42,16 @@ contract("Wallet", async accounts => {
                 3, 
                 "There are ${owners.length} owners but should be 3!"
             )
-            for (i=0; i < owners.length; i++){
+            for (let i=0; i < owners.length; i++){
                 assert.equal(
                     owners[i],
                     accounts[i],
                     `Owner ${i} is not the right owner`
                 )
             }
-        }
+        })
 
-        it ("should have the expected approvers"), async () => {
+        it ("should have the expected approvers", async () => {
             let approvers 
             await truffleAssert.passes(
                 approvers = await wallet.getApprovers(),
@@ -62,16 +62,16 @@ contract("Wallet", async accounts => {
                 3, 
                 `There are ${approvers.length} approvers but should be 3!`
             )
-            for (i=0; i < approvers.length; i++){
+            for (let i=0; i < approvers.length; i++){
                 assert.equal(
                     approvers[i],
-                    accounts[i]
+                    accounts[i],
                     `Approver ${i} is not the right approver`
                 )
             }
-        }
+        })
 
-        it ("should have the expected number of required approvals for a transfer"), async () => {
+        it ("should have the expected number of required approvals for a transfer", async () => {
             let requiredApprovals
             await truffleAssert.passes(
                 requiredApprovals = await wallet.getMinApprovals(),
@@ -82,20 +82,20 @@ contract("Wallet", async accounts => {
                 2,
                 `There are ${requiredApprovals} transfer approvals required but expected 2!`
             )
-        }
+        })
 
-        it ("should initially have no transfer requests"), async () => {
+        it ("should initially have no transfer requests", async () => {
             let total
             await truffleAssert.passes(
                 total = await wallet.totalTransferRequests(),
                 "Unable to get total number of transfer requests"
             )
-            asset.equal(
+            assert.equal(
                 total,
                 0,
                 `There are ${total} transfer requests, but expected 0!`
             )
-        }
+        })
     })
 
 
