@@ -1,0 +1,296 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x4D8b29876A719638243a40cd3Bf903DDd359F389",
+    "txHash": "0xc0575b99f5c6a1946feef9fb34658e2d0358b3bf9083ee3d01d1a570d86c5799"
+  },
+  "proxies": [
+    {
+      "address": "0x26dE6F193598Ba208Cf56FD113dB709F512B360E",
+      "txHash": "0xd330efb38089f9c92ed82318f8c02cb2150fd929f1b250a31ac3e1c1fe84ac3b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x85A5c9AE0bE225A6339f85eDA7A2E4E544b269DC",
+      "txHash": "0x168c539a278b7ba303c0625ff0d97977c38b75b09b6531681181acedb0b11f66",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x00690C72273Fe74090Cac73A96dc7FFB6904b923",
+      "txHash": "0xdf61e7291efcc52627c35a3ee9f4cbf85b6f676367711d5aba91675d6553963b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xB0Df9cae6C3f1C4a7EDB0642D88AC0039E16c587",
+      "txHash": "0xfca2e272dd8e8bc205738b37e96a650b4ec82f22383d2e36c722bd00cfea608a",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4ff0d0A00e2C0ec73a84eFf973e92FfDa6B1FceD",
+      "txHash": "0x355e279147690ed7dc2b5ece4c02ee031449da3797c0769a79d4d58de7c61f97",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x2A3110d2bdbf5b761726333d4d09FC24f71195C7",
+      "txHash": "0x3ba9f447f3bca9c43e2110bdbe799cde9f6491ab90264a69ecd979b69ad501f6",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x64424a63f9d2ae5F3B6A1Bcad52Ff1332b1027FB",
+      "txHash": "0xfd261a0a70f5601f5098983ca8b1c14007d9bcfdbfb89bb730801b1826173707",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x73BFE745956880cc7CBb9aFf4192B23E68b6973c",
+      "txHash": "0xab3eb6310821dec5a3df2b3f2254354dc3117950092f50a8286ea4ba41f04054",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x34ba47f0C9cc652EDB288CaFa5655aF84D64Ca0A",
+      "txHash": "0xf3aeb0a30c87275f5473546ae5535d6696d952022be214fe3b632777b81be558",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xc6cF2B98890240cCa929E8C9B1e331c4116ca295",
+      "txHash": "0x5837ea221b0a2e80028810ca4a6bb7c52900a1a209c8f8bb024191e936c82ec3",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5A0B8f553f329970a802174a8948032f9b75aB79",
+      "txHash": "0xd4ffdcdb16716ec0f8d1eb53a1ec771e9e89ebb1b9f6ab7d5bb05d38b70a7527",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x04B61c4Bf801623F4F1Ce62892A1beBeAe17BE49",
+      "txHash": "0x3015db2a5200df5919ec2a5d58fb65b726dc35114907b95c0526a3072dd3fab3",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5bCE7Ee994F97FaD766A173b1861694B26FcFFb6",
+      "txHash": "0xbda5adaeef7d3bf36824fc46fdf3ff721868aa0c9ad85f77b3fda4cb553f6d5b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x55eCEeF3775888668359eF57Ca0b8254a1aE4a6e",
+      "txHash": "0x10837cf33184071b4b238f254d00692faefa125fde9235e72697a247b3a3af99",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xd41cfA035BBFf5935fCB84555Fd1D4ECdD2662D6",
+      "txHash": "0x0f576a4a2cc8649cd090222fe274879889f6111f1fc8b4a207ec2e6e66b1424d",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xACb6aad3a9140Bb8E018ab88b9a4969897EC09Fe",
+      "txHash": "0xc51be535adb4363202c629479a67b0c4fbcd2e8746c198d7ed233336cad3cdd5",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xb8476a2c5C3012A506f53E905d45935397289AdB",
+      "txHash": "0x544c49672e02163a874c3f8c8040d382282393feb676551730ad32806e17e2e7",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xeF22e78c7313B16b35c60db22598Fe947931132C",
+      "txHash": "0x18c13b975488069b3e9c0d8139347881f09935b5c5facc7ca340650be142e81e",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x7e6C062fd5e7Ad142Fd823cE365B3099965a464b",
+      "txHash": "0xc621238a6e7bb0980a17a319538c24cf37b3289c3d2c8446748e549021f40a70",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xFA735B96a8C43E5636aa6D2F06b97cbE3dBfc79F",
+      "txHash": "0xe4d22dea620a5cf83618de38c71dd7cdf1a294a29d6f5945a3ed58fc09109879",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x46B4f63875F325117ac6cD42442dAE777d97A5a5",
+      "txHash": "0x387ca8dabd24632bc3400f148cbc92743dacab3fcd092c9bc3d23df95dcbd510",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x8336fFB026B767B173a42a191E82fd0a4b32eAee",
+      "txHash": "0x22b93590e8d23d119340e97b1fd7920f932297aeb2e2b2e50212c2a7f4fcaffe",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4671fBf3c943B5E1Fe979231cDbd80D56f931832",
+      "txHash": "0x13f65daf8fa34aead3eae57e0f811af5987e8f9568db2772cb6bc54e1af92c98",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x74dEaf025b5773973d4B646e39fA5cBb637A388A",
+      "txHash": "0xc7aa6d240c4bc9057fcc309115eaca2d2383ec6bf10e435f3513bab1a858f44a",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xfc11bE38192Fc2B77Dc8f8c0379f5c58645057e8",
+      "txHash": "0x654547afb3e8b9ed5f2d1ca6f4ef1b21b3de70c6ec1d302e1838a48ea1ede5ac",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xf480f4A01F68d384d8Db527aFE0Db54A469022dE",
+      "txHash": "0x1600bcdae6026cfe453f6a9aa888a8741ee6e1180c871c8ea98ea5f86360d088",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x15A93f3fb07065Bc679F371f030AdD5C819E967F",
+      "txHash": "0x906841696a6a052a889a666ccfd2c4de216d613dd4da4235be4a378f197a6472",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xDFABf21fD7C6ed9B2a5B752ce44767306b5C25c9",
+      "txHash": "0xede0bc4dad3bee80571308eb62595045783b5c04a9dc8d05fcde62798e00eaa7",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x65F6a082E7ba6E41423eACb904CbB1c4f6F5a200",
+      "txHash": "0x70befe6008196be5939f5c563ee43437b9adf961d9f349cf12c6971472d2a052",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x8FC1a68c52252B0a5CE339ba86b147F4F4C83915",
+      "txHash": "0xfe4923a2587f61dd971f6285de4e4b159ce808632735e42a6d53a6ec83a1e83e",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "832e2383f1219ec0bc9d041f4184964b510a8165f0a5f14e194690ba81f9f540": {
+      "address": "0x8dA1E58E1E5a5b975fFfc506a967C54FDC590a77",
+      "txHash": "0x9360b6fec0b9f7567ed9305aa23a34d37a3ff95783557ee43eba72bd64d6b55b",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../node_modules/@openzeppelin/contracts/proxy/utils/Initializable.sol:23"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../node_modules/@openzeppelin/contracts/proxy/utils/Initializable.sol:28"
+          },
+          {
+            "contract": "MultiOwnable",
+            "label": "_owners",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "MultiOwnable.sol:8"
+          },
+          {
+            "contract": "MultiOwnable",
+            "label": "_ownership",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "MultiOwnable.sol:9"
+          },
+          {
+            "contract": "Approvable",
+            "label": "_approvers",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "Approvable.sol:10"
+          },
+          {
+            "contract": "Approvable",
+            "label": "_approvership",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "Approvable.sol:11"
+          },
+          {
+            "contract": "Approvable",
+            "label": "_minApprovals",
+            "type": "t_uint256",
+            "src": "Approvable.sol:12"
+          },
+          {
+            "contract": "MultiSigWallet",
+            "label": "_walletCreator",
+            "type": "t_address",
+            "src": "MultiSigWallet.sol:12"
+          },
+          {
+            "contract": "MultiSigWallet",
+            "label": "_txRequests",
+            "type": "t_array(t_struct(TxRequest)284_storage)dyn_storage",
+            "src": "MultiSigWallet.sol:23"
+          },
+          {
+            "contract": "MultiSigWallet",
+            "label": "_txRequestors",
+            "type": "t_mapping(t_uint256,t_address)",
+            "src": "MultiSigWallet.sol:24"
+          },
+          {
+            "contract": "MultiSigWallet",
+            "label": "_txApprovals",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_bool))",
+            "src": "MultiSigWallet.sol:25"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_struct(TxRequest)284_storage)dyn_storage": {
+            "label": "struct MultiSigWallet.TxRequest[]"
+          },
+          "t_struct(TxRequest)284_storage": {
+            "label": "struct MultiSigWallet.TxRequest",
+            "members": [
+              {
+                "label": "requestor",
+                "type": "t_address"
+              },
+              {
+                "label": "recipient",
+                "type": "t_address"
+              },
+              {
+                "label": "reason",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "amount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "approvals",
+                "type": "t_uint256"
+              },
+              {
+                "label": "id",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_address)": {
+            "label": "mapping(uint256 => address)"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_bool))": {
+            "label": "mapping(address => mapping(uint256 => bool))"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          }
+        }
+      }
+    }
+  }
+}

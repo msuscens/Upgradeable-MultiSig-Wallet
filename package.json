@@ -1,7 +1,7 @@
 {
   "name": "upgradeable-multisig-wallet",
   "version": "1.0.0",
-  "description": "",
+  "description": "Project - Upgradeable Multisig Wallet",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +11,21 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.1.0",
     "truffle-assertions": "^0.9.2"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "@openzeppelin/truffle-upgrades": "^1.7.0",
+    "truffle": "^5.3.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msuscens/Upgradeable-MultiSig-Wallet.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/msuscens/Upgradeable-MultiSig-Wallet/issues"
+  },
+  "homepage": "https://github.com/msuscens/Upgradeable-MultiSig-Wallet#readme"
 }

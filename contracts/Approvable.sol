@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-contract Approvable {
+//import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol"
+//import "../node_modules/@openzeppelin/upgrades-core/contracts/Initializable.sol";
+import "../node_modules/@openzeppelin/contracts/proxy/utils/Initializable.sol";
+
+contract Approvable is Initializable {
     
     address[] internal _approvers;
     mapping (address => bool) internal _approvership;
@@ -12,7 +16,11 @@ contract Approvable {
          _;
     }
     
-    constructor(address[] memory approvers, uint minApprovals) {
+    function initialize(address[] memory approvers, uint minApprovals)
+        public
+        virtual
+        initializer
+    {
         require(
             minApprovals <= approvers.length,
             "Minimum approvals > approvers!"

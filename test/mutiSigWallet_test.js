@@ -1,5 +1,18 @@
+const { deployProxy, upgradeProxy } = require('@openzeppelin/truffle-upgrades')
+
 const Wallet = artifacts.require("MultiSigWallet")
+const WalletV2 = artifacts.require("MultiSigWalletV2")
+
 const truffleAssert = require("truffle-assertions")
+
+const owners =
+  [
+    "0xfC1d4eA100c57A6D975eD8182FaAcFD17871a1e4",
+    "0x68F8F71A19b06d425edD180A6Bd9a741CA3C485C",
+    "0xd9B822DA7B6f936f85114A5d2D1584741751cb22"
+  ]
+const numTxApprovals = 2
+
 
 contract("Wallet", async accounts => {
 
@@ -7,10 +20,11 @@ contract("Wallet", async accounts => {
 
     let wallet
     before(async function() {
-        wallet = await Wallet.deployed()
+        // wallet = await Wallet.deployed()
+        wallet = await deployProxy(Wallet, [owners, numTxApprovals])
     })
 
-
+      
     describe("Initial State", () => {
     // NB: For the 'Inital State' tests to be valid the assumption is that
     // the wallet was created with 3 owners and 3 approvers, with 2/3 
@@ -375,4 +389,59 @@ contract("Wallet", async accounts => {
         })
     })
 
+
+    describe('Upgraded wallet', () => {
+        it('should keep the same wallet data', async () => {
+        
+            const creator = await wallet.getWalletCreator()
+            const balance = await wallet.getWalletBalance()
+            const totalRequests = await wallet.totalTransferRequests()
+
+            const walletV2 = await upgradeProxy(wallet.address, WalletV2)
+
+            const ownersV2 = await walletV2.getOwners()
+            assert.deepEqual(
+                ownersV2,
+                owners,
+                "Owners are different!"
+            )
+
+            const approversV2 = await walletV2.getApprovers()
+            assert.deepEqual(
+                approversV2, 
+                owners, 
+                "Approvers are different!"
+            )
+
+            const numTxApprovalsV2 = await walletV2.getMinApprovals()
+            assert.deepEqual(
+                Number(numTxApprovalsV2), 
+                Number(numTxApprovals), 
+                "Required number of Tx approvals is different!"
+            )
+
+            const creatorV2 = await walletV2.getWalletCreator()
+            assert.deepEqual(
+                creatorV2, 
+                creator, 
+                "Wallet creator is different!"
+            )
+
+            const totalRequestsV2 = await walletV2.totalTransferRequests()
+            console.log("totalRequestsV2=", Number(totalRequestsV2))
+            assert.deepEqual(
+                Number(totalRequestsV2), 
+                Number(totalRequests),
+                "Total number of transfer requests are different!"
+            )
+
+            const balanceV2 = await walletV2.getWalletBalance()
+            console.log("balanceV2=", Number(balanceV2))
+            assert.deepEqual(
+                Number(balanceV2), 
+                Number(balance), 
+                "Wallet balance is different!"
+            )
+        })
+    })
 })

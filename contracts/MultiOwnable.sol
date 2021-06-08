@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-contract MultiOwnable {
+import "../node_modules/@openzeppelin/contracts/proxy/utils/Initializable.sol";
+
+contract MultiOwnable is Initializable {
     
     address[] internal _owners;
     mapping (address => bool) internal _ownership;
@@ -11,8 +13,11 @@ contract MultiOwnable {
         _;
     }
     
-    constructor(address[] memory owners) {
-
+    function initialize(address[] memory owners)
+        public
+        virtual
+        initializer
+    {
         for (uint i=0; i < owners.length; i++) {
             require(owners[i] != address(0), "Owner with 0 address!");
             require(!_ownership[owners[i]], "Duplicate owner address!");

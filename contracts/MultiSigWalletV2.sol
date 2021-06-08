@@ -6,7 +6,7 @@ import "../node_modules/@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "./MultiOwnable.sol";
 import "./Approvable.sol";
 
-contract MultiSigWallet is MultiOwnable, Approvable {
+contract MultiSigWalletV2 is MultiOwnable, Approvable {
 
     // STATE VARIABLES
     address internal _walletCreator;
