@@ -135,6 +135,41 @@ CONVERT CONTRACTS TO BE UPGRADABLE:
         const walletV2 = await upgradeProxy(wallet.address, WalletV2)
 
 
+ADD PROXY AND PROXYADMIN CONTRACTS:
+
+1. Create the WalletProxy contract that inherits from OpenZeppelin's
+TransparentUpgradeableProxy contract
+
+2. Create the WalletProxyAdmin contract that inherits from OpenZeppelin's
+ProxyAdmin contract
+
+3. Update migrations file (renamed 2_wallet_logic_&_proxy_&_admin.js)
+to deploy the contracts in sequence:
+      i) MultiSigWallet - the logic contract
+     ii) WalletProxyAdmin - the adminstration contract 
+    iii) WalletProxy - proxy contract who's constructor requires the 
+        addresses of the logic & admin contracts
+
+    Notes:
+    a) Similar to in multiSigWallet_test.js, 'truffle upgrades' is employed:
+        const { deployProxy } = require('@openzeppelin/truffle-upgrades')
+       So that the deployProxy function can be used for the logic contract
+       (MultiSigWallet), see:
+       https://docs.openzeppelin.com/upgrades-plugins/1.x/truffle-upgrades
+    b) The proxy contract (WalletProxy) has a constructor with the paramters:
+            constructor(address _logic, address admin_, bytes memory _data) 
+        If `_data` is nonempty, it's used as data in a delegate call to 
+        `_logic`. This will typically be an 'encoded function call', and 
+        allows initializating the storage of the proxy like a Solidity
+        constructor.  To pass '_data' as empty (ie. make no call to '_logic")
+        use "0x", eg:
+              await deployer.deploy(
+                WalletProxy,
+                logicInstance.address,
+                adminInstance.address,
+                "0x"
+              )
+
 
 
 
