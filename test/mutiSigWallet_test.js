@@ -5,6 +5,17 @@ const WalletV2 = artifacts.require("MultiSigWalletV2")
 
 const truffleAssert = require("truffle-assertions")
 
+// IMPORTANT: WALLET SETUP FOR THE FOLLOWING TESTS
+// For the 'Inital State' tests to be valid the assumption is that
+// the wallet was created with 3 owners and 3 approvers, with 2/3 
+// approvals required before a transaction is actually transfered.
+// The following Truffle accounts must have been set as the owners 
+// (ie. in migrations deployement script):
+//    accounts[0], accounts[1], accounts[2] 
+// Similarly the approvers should have been set to:
+//    accounts[0], accounts[1], accounts[2]
+// (ie. in this instance, the approvers are the owners)
+
 const owners =
   [
     "0xfC1d4eA100c57A6D975eD8182FaAcFD17871a1e4",
@@ -20,21 +31,17 @@ contract("Wallet", async accounts => {
 
     let wallet
     before(async function() {
-        // wallet = await Wallet.deployed()
+        // deployProxy : Deploys 'logic'' contract (together with a proxy) and 
+        // call initialize with the required arguments
         wallet = await deployProxy(Wallet, [owners, numTxApprovals])
+
+        // Replaces :
+        //  wallet = await Wallet.deployed()
+        // Used before the wallet contract was updated to an upgradeable 'logic' contracts
     })
 
       
     describe("Initial State", () => {
-    // NB: For the 'Inital State' tests to be valid the assumption is that
-    // the wallet was created with 3 owners and 3 approvers, with 2/3 
-    // approvals required before a transaction is actually transfered.
-    // The following Truffle accounts must have been set as the owners 
-    // (ie. in migrations deployement script):
-    //    accounts[0], accounts[1], accounts[2] 
-    // Similarly the approvers should have been set to:
-    //    accounts[0], accounts[1], accounts[2]
-    // (ie. in this instance, the approvers are the owners)
 
         it ("should have the expected creator", async () => {
             let creator
@@ -158,15 +165,6 @@ contract("Wallet", async accounts => {
                 500,
                 `Balance should be 600 but is ${balance} after deposit!`
             )
-
-            // Depositor doesn't call deposit function (but someother unknown function by mistake)
-            // await wallet.undefinedFunction({value: 100, from: accounts[5]})  
-            // let balance = await wallet.getWalletBalance();
-            // assert.equal(
-            //    balance,
-            //    600,
-            //    `Balance should be 600 but is ${balance} after deposit!`
-            // )
         })
     })
 
@@ -386,18 +384,29 @@ contract("Wallet", async accounts => {
                 Number(payeeNewBalance),
                 `Payee balance changed after another approval of an already sent Tx!  Was ${payeeInitialBalance}, now ${payeeNewBalance}`
             )
+
         })
     })
 
 
-    describe('Upgraded wallet', () => {
-        it('should keep the same wallet data', async () => {
-        
-            const creator = await wallet.getWalletCreator()
-            const balance = await wallet.getWalletBalance()
-            const totalRequests = await wallet.totalTransferRequests()
+    describe('Upgraded to V2 Wallet', () => {
 
-            const walletV2 = await upgradeProxy(wallet.address, WalletV2)
+        let creator 
+        let balance 
+        let totalRequests
+        let walletV2
+
+        before(async function() {
+            // Get wallet states (before any upgrade)
+            creator = await wallet.getWalletCreator()
+            balance = await wallet.getWalletBalance()
+            totalRequests = await wallet.totalTransferRequests()
+
+            // Upgrade to new version of wallet contract (V2)
+            walletV2 = await upgradeProxy(wallet.address, WalletV2)
+        })
+
+        it('should have the same wallet owners', async () => {
 
             const ownersV2 = await walletV2.getOwners()
             assert.deepEqual(
@@ -405,6 +414,9 @@ contract("Wallet", async accounts => {
                 owners,
                 "Owners are different!"
             )
+        })
+
+        it('should have the same transfer request approvers', async () => {
 
             const approversV2 = await walletV2.getApprovers()
             assert.deepEqual(
@@ -412,6 +424,9 @@ contract("Wallet", async accounts => {
                 owners, 
                 "Approvers are different!"
             )
+        })
+
+        it('should have the same number of required transaction approvals', async () => {
 
             const numTxApprovalsV2 = await walletV2.getMinApprovals()
             assert.deepEqual(
@@ -419,6 +434,9 @@ contract("Wallet", async accounts => {
                 Number(numTxApprovals), 
                 "Required number of Tx approvals is different!"
             )
+        })
+
+        it('should have the same wallet creator', async () => {
 
             const creatorV2 = await walletV2.getWalletCreator()
             assert.deepEqual(
@@ -426,22 +444,35 @@ contract("Wallet", async accounts => {
                 creator, 
                 "Wallet creator is different!"
             )
+        })
 
-            const totalRequestsV2 = await walletV2.totalTransferRequests()
-            console.log("totalRequestsV2=", Number(totalRequestsV2))
+        let totalRequestsV2
+        it('should have the same number of transfer requests', async () => {
+
+            totalRequestsV2 = await walletV2.totalTransferRequests()
             assert.deepEqual(
                 Number(totalRequestsV2), 
                 Number(totalRequests),
                 "Total number of transfer requests are different!"
             )
+        })
 
-            const balanceV2 = await walletV2.getWalletBalance()
-            console.log("balanceV2=", Number(balanceV2))
+        let balanceV2
+        it('should have the same balance', async () => {
+
+            balanceV2 = await walletV2.getWalletBalance()
             assert.deepEqual(
                 Number(balanceV2), 
                 Number(balance), 
                 "Wallet balance is different!"
             )
+        })
+
+        after(async function() {
+            console.log("Wallet (V1): Total Tx Requests =", Number(await wallet.totalTransferRequests()))
+            console.log("Wallet (V1): Balance=", Number(await wallet.getWalletBalance()))
+            console.log("Upgraded Wallet (V2): Total Tx Requests=", Number(totalRequestsV2))
+            console.log("Upgraded Wallet (V2): Balance=", Number(balanceV2))
         })
     })
 })

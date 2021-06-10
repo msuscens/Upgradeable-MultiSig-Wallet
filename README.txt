@@ -133,6 +133,9 @@ CONVERT CONTRACTS TO BE UPGRADABLE:
 
     b. To upgrade wallet use:
         const walletV2 = await upgradeProxy(wallet.address, WalletV2)
+    
+    Note: '@openzeppelin/truffle-upgrades' provides the functions:
+    deployProxy and upgradeProxy (see OZ 'truffle-upgrades' documentation)
 
 
 ADD PROXY AND PROXYADMIN CONTRACTS:
@@ -174,9 +177,23 @@ to deploy the contracts in sequence:
 
 
 
+______________________________________________________________________________
 
-(There's a supplementry additonal recource here:
-https://forum.openzeppelin.com/t/openzeppelin-upgrades-step-by-step-tutorial-for-truffle/3579)
+List of Resources used for developing this upgradeable contract:
+
+https://blog.openzeppelin.com/the-transparent-proxy-pattern/
+https://docs.openzeppelin.com/upgrades-plugins/1.x/
+https://docs.openzeppelin.com/contracts/3.x/api/proxy
+https://forum.openzeppelin.com/t/openzeppelin-upgrades-step-by-step-tutorial-for-truffle/3579
+https://forum.openzeppelin.com/c/support/upgrades/35
+
+Background on Upgrades Plugins (OpenZeppelin CLI no longer being developed):
+https://forum.openzeppelin.com/t/building-for-interoperability-why-we-re-focusing-on-upgrades-plugins/4088
+
+Resources on writing Truffle Test Cases:
+https://dzone.com/articles/a-few-tips-for-unit-testing-ethereum-smart-contrac
+
+
 
     
  
