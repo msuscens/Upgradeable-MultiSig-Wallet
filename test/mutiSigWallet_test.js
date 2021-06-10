@@ -1,3 +1,9 @@
+// Tests for the MultiSigWallet contract only.  
+// Ie. they don't' test (or use) the WalletProxy (or WalletProxyAdmin)
+// contracts but rather they employ the deployProxy an upgradeProxy functions
+// (from open zeppelin's truffle-upgrades library).
+// See: https://docs.openzeppelin.com/upgrades-plugins/1.x/truffle-upgrades
+
 const { deployProxy, upgradeProxy } = require('@openzeppelin/truffle-upgrades')
 
 const Wallet = artifacts.require("MultiSigWallet")
