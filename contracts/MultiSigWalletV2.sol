@@ -42,12 +42,14 @@ contract MultiSigWalletV2 is MultiOwnable, Approvable {
     function initialize(address[] memory owners, uint minTxApprovals)
         public
         virtual
-        override
+        // override
         initializer
     {
-        MultiOwnable.initialize(owners);
-        Approvable.initialize(owners, minTxApprovals);
-
+        // MultiOwnable.initialize(owners);
+        // Approvable.initialize(owners, minTxApprovals);
+        MultiOwnable.initializeMultiOwnable(owners);
+        Approvable.initializeApprovable(owners, minTxApprovals);
+        
         _walletCreator = msg.sender;
     }
     

@@ -13,7 +13,7 @@ contract MultiOwnable is Initializable {
         _;
     }
     
-    function initialize(address[] memory owners)
+    function initializeMultiOwnable(address[] memory owners)
         public
         virtual
         initializer

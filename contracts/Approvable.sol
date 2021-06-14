@@ -16,7 +16,7 @@ contract Approvable is Initializable {
          _;
     }
     
-    function initialize(address[] memory approvers, uint minApprovals)
+    function initializeApprovable(address[] memory approvers, uint minApprovals)
         public
         virtual
         initializer

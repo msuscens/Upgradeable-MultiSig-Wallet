@@ -6,7 +6,10 @@ developing it further to make it an owner upgradable MultiSig Wallet smart contr
 (that upon upgrade keeps the wallet's existing data/contents intact).
 ___________________________________________________________________________________
 
-Preparation : Set up my multiSigWallet code in Truffle, so that it compiles
+THIS README: Forma my personal learning log and records each step I took, 
+issues I encounted and any wrong turns taken.
+
+PREPARATION : Set up my multiSigWallet code in Truffle, so that it compiles
             with solc 0.8.4 and is deployable to gananche-cli local blockchain.
 Which I did as follows:
 1. Set up new drirectory for this project ('Upgradeable MultiSig Wallet')
@@ -43,7 +46,7 @@ passeses these as parameters to the multiSigWallet constructor (on deployment)
     $ git push -u origin master
 
 
-Prep Part 2:  Creating Test scripts for the MultiSig Wallet
+PREPARATION PART 2:  Creating Test scripts for the MultiSig Wallet
 16: Install truffle assertions:
     $ npm install truffle-assertions
 17: Develop a series of tests in tests/multiSigWallet_tests.js
@@ -138,7 +141,9 @@ CONVERT CONTRACTS TO BE UPGRADABLE:
     deployProxy and upgradeProxy (see OZ 'truffle-upgrades' documentation)
 
 
-ADD PROXY AND PROXYADMIN CONTRACTS:
+ADD PROXY AND PROXYADMIN CONTRACTS: 
+    WRITING OWN PROXY CONTRACT-INCORRECT: I now think this step is the
+                                    wrong approach (see details below):
 
 1. Create the WalletProxy contract that inherits from OpenZeppelin's
 TransparentUpgradeableProxy contract
@@ -146,13 +151,16 @@ TransparentUpgradeableProxy contract
 2. Create the WalletProxyAdmin contract that inherits from OpenZeppelin's
 ProxyAdmin contract
 
-3. Update migrations file (renamed 2_wallet_logic_&_proxy_&_admin.js)
-to deploy the contracts in sequence:
+3. Update migrations file (renamed:
+    2_wallet_logic_&_proxy_&_admin.js) to deploy the contracts in sequence:
       i) MultiSigWallet - the logic contract
      ii) WalletProxyAdmin - the adminstration contract 
-    iii) WalletProxy - proxy contract who's constructor requires the 
-        addresses of the logic & admin contracts
-
+    iii) WalletProxy - proxy contract (that inherits from openzeppelin's
+        TransparentUpgradeableProxy contract) and who's constructor requires  
+        the addresses of the logic & admin contracts.
+    iv) IMPORTANT : I now think that this approach is wrong - TBC.
+        Ie. I shouldn't create my own proxy contract (walletProxy) but rather
+        ALWAYS use deployProxy function to create the proxy (automaticlly)
     Notes:
     a) Similar to in multiSigWallet_test.js, 'truffle upgrades' is employed:
         const { deployProxy } = require('@openzeppelin/truffle-upgrades')
@@ -173,8 +181,55 @@ to deploy the contracts in sequence:
                 "0x"
               )
 
+4. Write tests for the WalletProxy (walletProxy_test.js)
+Specifically to test the executution of the wallet (logic)
+functions. Ie. tests the execution of MultiSigWallet's functions
+but with all function calls being made to the WalletProxy contract.  
+(These tests exclude the use of the WalletProxy's admin functions
+ - for admin function tests see WalletProxyAdmin_test.js)
 
+IMPORTANT : I now think that this approach is wrong - TBC.
+    Ie. I shouldn't create my own proxy contract (walletProxy) but rather
+    ALWAYS use deployProxy function to create the proxy (automaticlly).
+    THEREFORE I don't need these specific WalletProxy testscripts.
 
+    The approach I've coded here (with my own proxy contract), gives the
+    result that logic contract functions are not executed when called on
+    the proxy.  For example after 'truffle migrate --reset' see the 
+    following truffle console test results:
+    
+    Mark$ truffle console
+    truffle(development)> let proxyInstance = await WalletProxy.deployed()
+    undefined
+    truffle(development)> await proxyInstance.getWalletBalance()
+    Uncaught TypeError: proxyInstance.getWalletBalance is not a function
+        at evalmachine.<anonymous>:1:23
+    truffle(development)> await proxyInstance.getWalletCreator()
+    Uncaught TypeError: proxyInstance.getWalletCreator is not a function
+        at evalmachine.<anonymous>:1:23
+    truffle(development)> await proxyInstance.totalTransferRequests()
+    Uncaught TypeError: proxyInstance.totalTransferRequests is not a function
+        at evalmachine.<anonymous>:1:23
+    truffle(development)> 
+    truffle(development)> let logicInstance = await MultiSigWallet.deployed()
+    undefined
+    truffle(development)> await logicInstance.getWalletBalance()
+    BN { negative: 0, words: [ 0, <1 empty item> ], length: 1, red: null }
+    truffle(development)> await logicInstance.getWalletCreator()
+    '0xfC1d4eA100c57A6D975eD8182FaAcFD17871a1e4'
+    truffle(development)> await logicInstance.totalTransferRequests()
+    BN { negative: 0, words: [ 0, <1 empty item> ], length: 1, red: null }
+    truffle(development)> 
+
+    Similarly the tests (see walletProxy_test.js) give the similar results,
+    with my walletProxy being unable to locate the wallet logic contract
+    (multiSigWallet) functions when they are called against it.
+    See my post here for more details:
+    https://forum.openzeppelin.com/t/function-call-to-proxy-contract-failing-to-execute-the-logic-contracts-function/10291
+
+    I'm commiting this to git/gitHub in anycase, before reworking code,
+    migration and test scripts to just use deployProxy function.
+    
 
 
 ______________________________________________________________________________

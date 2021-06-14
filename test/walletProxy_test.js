@@ -1,12 +1,12 @@
-// Tests for the MultiSigWallet contract only.  
-// Ie. they don't' test (or use) the WalletProxy (or WalletProxyAdmin)
-// contracts but rather they employ the deployProxy an upgradeProxy functions
-// (from open zeppelin's truffle-upgrades library).
-// See: https://docs.openzeppelin.com/upgrades-plugins/1.x/truffle-upgrades
+// Test Scope:
+// Tests WalletProxy contract's executution of the wallet (logic)
+// contract's functions. Ie. tests the excution of MultiSigWallet's
+// functions but with all calls made to the WalletProxy contract.  
 
 const { deployProxy, upgradeProxy } = require('@openzeppelin/truffle-upgrades')
 
-const Wallet = artifacts.require("MultiSigWallet")
+const WalletProxy = artifacts.require("WalletProxy")
+const WalletV1 = artifacts.require("MultiSigWallet")
 const WalletV2 = artifacts.require("MultiSigWalletV2")
 
 const truffleAssert = require("truffle-assertions")
@@ -16,18 +16,20 @@ const numTxApprovals = 2
 let owners
 
 // IMPORTANT: WALLET SETUP FOR THE FOLLOWING TESTS
-// For the 'Inital State' tests to be valid the assumption is that
-// the wallet was created with 3 owners and 3 approvers, with 2/3 
-// approvals required before a transaction is actually transfered.
+// For the 'Wallets Inital State' tests to be valid the assumption 
+// is that the wallet was created with 3 owners and 3 approvers,  
+// with 2/3 approvals required before a transaction is made.
 // [Note: The MultiSigWallet code (initializer) currently sets the 
 // wallet's approvers to be the owners.]
 
 
-contract.skip("Wallet", async accounts => {
+contract("WalletProxy", function(accounts) {
 
     "use strict"
 
-    let wallet
+    let proxyInstance
+    let logicInstance
+    
     before(async function() {
         // Wallet owners
         owners = [
@@ -36,22 +38,76 @@ contract.skip("Wallet", async accounts => {
             accounts[2],
         ]
 
-        // Deploys Wallet 'logic'' contract (together with a Truffle proxy) - 
-        // NB 'deployProxy' automatically calls initialize with given arguments
-        wallet = await deployProxy(Wallet, [owners, numTxApprovals])
+        // Deploy Wallet (logic) contract
+        await truffleAssert.passes(
+            logicInstance = await WalletV1.new({from: accounts[9]})
+        )
+        console.log("Deployed Logic Contract:", logicInstance.address)
+        
+        // Deploy Proxy contract
+        await truffleAssert.passes(
+            this.walletProxy = await WalletProxy.new(
+                logicInstance.address,  // wallet's logic
+                accounts[9],            //admin account
+                "0x",
+                {from: accounts[9]}
+            ) 
+        )
+        console.log("Deployed Proxy Contract:", this.walletProxy.address, "\n")
 
-        // Replaces :
-        //  wallet = await Wallet.deployed()
-        // Used before the wallet contract was updated to an upgradeable 'logic' contracts
+        proxyInstance = this.walletProxy
+    })
+
+
+    describe("Initializing Wallet", () => {
+        it ("should initialize upon the first call", async () => {
+
+        // *** Fails: "TypeError: proxyInstance.initialize is not a function"
+            await truffleAssert.passes(
+                await proxyInstance.initialize(
+                    owners,
+                    numTxApprovals,
+                    {from: accounts[0]}
+                ),
+                "Unable to initialize the wallet!"
+            )
+            
+            // ** DEBUG: If I comment out the above failing test, then
+            // the following 3 tests all pass:
+
+            await truffleAssert.passes(
+                await logicInstance.initialize(owners, numTxApprovals, {from: accounts[0]}),
+                "Direct call to logic contract's initialize function failed!"
+            )
+
+            await truffleAssert.passes(
+                await logicInstance.getWalletCreator({from: accounts[0]}),
+                "Direct call to logic contract's getWalletCreator function failed!"
+            )
+        
+            await truffleAssert.passes(
+                await proxyInstance.changeAdmin(accounts[8], {from: accounts[9]}),
+                "Proxy call failed to change admin!"
+            )
+
+        })
+
+        it ("should NOT be able to re-initialize wallet with a second call", async () => {
+
+            await truffleAssert.fails(
+                await proxyInstance.initialize(owners, numTxApprovals, {from: accounts[1]}),
+                "Able to re-initialize wallet (after it was previously initialized)!"
+            )
+        })
     })
 
       
-    describe("Initial State", () => {
+    describe("Wallet's Initial State", () => {
 
         it ("should have the expected creator", async () => {
             let creator
             await truffleAssert.passes(
-                creator = await wallet.getWalletCreator(),
+                creator = await proxyInstance.getWalletCreator(),
                 "Unable to get wallet's creator"
             )
             assert.equal(creator, accounts[0])
@@ -60,7 +116,7 @@ contract.skip("Wallet", async accounts => {
         it ("should have the expected owners", async () => {
             let owners
             await truffleAssert.passes(
-                owners = await wallet.getOwners(),
+                owners = await proxyInstance.getOwners(),
                 "Unable to get wallet's owners"
             )
             assert.equal(
@@ -80,7 +136,7 @@ contract.skip("Wallet", async accounts => {
         it ("should have the expected approvers", async () => {
             let approvers 
             await truffleAssert.passes(
-                approvers = await wallet.getApprovers(),
+                approvers = await proxyInstance.getApprovers(),
                 "Unable to get wallet's approvers"
             )
             assert.equal(
@@ -100,7 +156,7 @@ contract.skip("Wallet", async accounts => {
         it ("should have the expected number of required approvals for a transfer", async () => {
             let requiredApprovals
             await truffleAssert.passes(
-                requiredApprovals = await wallet.getMinApprovals(),
+                requiredApprovals = await proxyInstance.getMinApprovals(),
                 "Unable to get minimum number of approvers"
             )
             assert.equal(
@@ -113,7 +169,7 @@ contract.skip("Wallet", async accounts => {
         it ("should initially have no transfer requests", async () => {
             let total
             await truffleAssert.passes(
-                total = await wallet.totalTransferRequests(),
+                total = await proxyInstance.totalTransferRequests(),
                 "Unable to get total number of transfer requests"
             )
             assert.equal(
@@ -124,7 +180,7 @@ contract.skip("Wallet", async accounts => {
         })
     })
 
-
+/*
     describe("Depositing ETH", () => {
 
         it("should receive ETH that is sent to it from any account", async () => {
@@ -480,4 +536,6 @@ contract.skip("Wallet", async accounts => {
             console.log("Upgraded Wallet (V2): Balance=", Number(balanceV2))
         })
     })
+
+    */
 })
