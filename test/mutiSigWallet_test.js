@@ -23,7 +23,7 @@ let owners
 // wallet's approvers to be the owners.]
 
 
-contract.skip("Wallet", async accounts => {
+contract("Wallet", async accounts => {
 
     "use strict"
 
@@ -40,9 +40,6 @@ contract.skip("Wallet", async accounts => {
         // NB 'deployProxy' automatically calls initialize with given arguments
         wallet = await deployProxy(Wallet, [owners, numTxApprovals])
 
-        // Replaces :
-        //  wallet = await Wallet.deployed()
-        // Used before the wallet contract was updated to an upgradeable 'logic' contracts
     })
 
       
@@ -409,6 +406,29 @@ contract.skip("Wallet", async accounts => {
 
             // Upgrade to new version of wallet contract (V2)
             walletV2 = await upgradeProxy(wallet.address, WalletV2)
+        })
+
+
+        it('should allow (only) an owner to set the wallet version number', async () => {
+
+            await truffleAssert.reverts(
+                walletV2.setWalletVersion(2, {from: accounts[4]}),
+            )
+
+            await truffleAssert.passes(
+                walletV2.setWalletVersion(2),
+                "Owner was unable to initially set the wallet's version number"
+            )
+        })
+
+        it('should be able to get the wallet version number', async () => {
+
+            let version = await walletV2.getWalletVersion()
+            assert.deepEqual(
+                Number(version), 
+                2, 
+                "Wallet version is incorrect!"
+            )
         })
 
         it('should have the same wallet owners', async () => {

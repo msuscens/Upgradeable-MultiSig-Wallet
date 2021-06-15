@@ -25,6 +25,8 @@ contract MultiSigWalletV2 is MultiOwnable, Approvable {
     mapping (address => mapping (uint => bool)) internal _txApprovals;
         // approver => (requestId => approval?)
     
+    uint _version;    //ADDED new state variable
+
     event DepositReceived(uint amount); 
     event TxRequestCreated(
         uint id,
@@ -51,9 +53,10 @@ contract MultiSigWalletV2 is MultiOwnable, Approvable {
         Approvable.initializeApprovable(owners, minTxApprovals);
         
         _walletCreator = msg.sender;
+        // _version = 13;  // Not executed as initializer only runs once i.e. upon INITIAL contract deploy
     }
     
-    
+
     function deposit() external payable {
         require (msg.value > 0, "No funds sent to deposit!");
         emit DepositReceived(msg.value);
@@ -179,5 +182,13 @@ contract MultiSigWalletV2 is MultiOwnable, Approvable {
     
     function totalTransferRequests() public view returns (uint) {
         return _txRequests.length; // Includes cancelled & approved requests
+    }
+
+    function setWalletVersion(uint number) public onlyAnOwner {
+        _version = number;
+    }
+
+    function getWalletVersion() public view returns (uint) {
+        return _version;
     }
 }
