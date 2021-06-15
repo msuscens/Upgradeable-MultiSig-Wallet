@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "../node_modules/@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import "../node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 contract MultiOwnable is Initializable {
     

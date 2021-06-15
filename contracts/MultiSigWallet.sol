@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "../node_modules/@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import "../node_modules/@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+//import "../node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "./MultiOwnable.sol";
 import "./Approvable.sol";
 
-contract MultiSigWallet is MultiOwnable, Approvable {
+contract MultiSigWallet is MultiOwnable, Approvable, PausableUpgradeable {
 
     // STATE VARIABLES
     address internal _walletCreator;
@@ -49,6 +50,7 @@ contract MultiSigWallet is MultiOwnable, Approvable {
         // Approvable.initialize(owners, minTxApprovals);
         MultiOwnable.initializeMultiOwnable(owners);
         Approvable.initializeApprovable(owners, minTxApprovals);
+        PausableUpgradeable.__Pausable_init();
 
         _walletCreator = msg.sender;
     }
@@ -180,4 +182,5 @@ contract MultiSigWallet is MultiOwnable, Approvable {
     function totalTransferRequests() public view returns (uint) {
         return _txRequests.length; // Includes cancelled & approved requests
     }
+
 }

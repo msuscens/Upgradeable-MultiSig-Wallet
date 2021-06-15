@@ -155,6 +155,33 @@ abandoned (but keeping here for information - see appendix below)
     to check the for the correct operation of these new functions
     c. Refactored migration script (2_wallet_with_proxy.js)
 
+6. Add capability to make functions pausable - with associated function
+modifiers 
+    a. Install upgradeable versions of the OZ contracts into the folder:
+    node_modules/@openzeppelin/contracts-upgradeable
+    In console:
+        $ npm install @openzeppelin/contracts-upgradeable
+
+    b. Update MultiSigWallet and MultiSigWalletV2 contracts:
+          i) import "../node_modules/@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+         ii) update exisiting import statements to use 'contracts-upgradeable'
+            instead of 'contracts'. Eg. 
+            import "../node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";  
+        iii) amend contracts to inherit from : PausableUpgradeable
+         iv) In the initialize() call the PausableUpgradeable initializer, ie:
+                PausableUpgradeable.__Pausable_init();
+
+    c.  Amend to MultiSigWalletV2 contract to make function(s) pausible
+         i) Add pause() and unpause() functions (as onlyAnOwner)
+        ii) Add the 'whenNotPaused' modifier to the getWalletBalance() function 
+        iii) Add 'Pausibility' tests (in multiSigWallet_test.js) to ensure that
+            the getWalletBalance() function can be paused and unpaused.
+
+
+
+
+
+
 
 ______________________________________________________________________________
 

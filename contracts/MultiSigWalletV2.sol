@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "../node_modules/@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import "../node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "../node_modules/@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
 import "./MultiOwnable.sol";
 import "./Approvable.sol";
 
-contract MultiSigWalletV2 is MultiOwnable, Approvable {
+contract MultiSigWalletV2 is MultiOwnable, Approvable, PausableUpgradeable {
 
     // STATE VARIABLES
     address internal _walletCreator;
@@ -51,7 +52,8 @@ contract MultiSigWalletV2 is MultiOwnable, Approvable {
         // Approvable.initialize(owners, minTxApprovals);
         MultiOwnable.initializeMultiOwnable(owners);
         Approvable.initializeApprovable(owners, minTxApprovals);
-        
+        PausableUpgradeable.__Pausable_init();
+
         _walletCreator = msg.sender;
         // _version = 13;  // Not executed as initializer only runs once i.e. upon INITIAL contract deploy
     }
@@ -172,7 +174,7 @@ contract MultiSigWalletV2 is MultiOwnable, Approvable {
         return _txRequests[id];
     }
     
-    function getWalletBalance() public view returns (uint balance) {
+    function getWalletBalance() public view whenNotPaused returns (uint balance) {
         return address(this).balance;
     }
     
@@ -191,4 +193,13 @@ contract MultiSigWalletV2 is MultiOwnable, Approvable {
     function getWalletVersion() public view returns (uint) {
         return _version;
     }
+
+    function pause() public onlyAnOwner whenNotPaused {
+      _pause();
+    }
+
+    function unpause() public onlyAnOwner whenPaused {
+      _unpause();
+    }
+
 }
